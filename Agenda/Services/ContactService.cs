@@ -1,5 +1,6 @@
 ﻿using Agenda.Data;
 using Agenda.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Agenda.Services
 {
@@ -12,9 +13,16 @@ namespace Agenda.Services
             _context = context;
         }
 
-        public List<Contact> GetContacts()
+        public async Task<List<Contact>> GetContactsAsync()
         {
-            return _context.Contact.ToList();
+            return await _context.Contact.ToListAsync();
+        }
+
+        public async Task CreateContactAsync(Contact obj)
+        {
+            obj.User = _context.User.First();
+            _context.Add(obj);
+            await _context.SaveChangesAsync();
         }
     }
 }
