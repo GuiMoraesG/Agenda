@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Agenda.Data;
+using Agenda.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AgendaContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("AgendaContext"), new MySqlServerVersion(new Version(8, 0, 36))));
+
+builder.Services.AddScoped<ContactService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
