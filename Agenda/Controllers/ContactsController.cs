@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Agenda.Services;
 using Agenda.Models;
+using Agenda.Models.ViewModels;
+using System.Diagnostics;
 
 namespace Agenda.Controllers
 {
@@ -38,13 +40,13 @@ namespace Agenda.Controllers
         {
             if (id == null)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { Message = "Id não recebido" });
             }
 
             var obj = await _contactService.FindByIdAsync(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "Usuário não encontrado" });
             }
 
             return View(obj);
@@ -62,13 +64,13 @@ namespace Agenda.Controllers
         {
             if (id == null)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { Message = "Id não recebido" });
             }
 
             var obj = await _contactService.FindByIdAsync(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "Usuário não encontrado" });
             }
 
             return View(obj);
@@ -80,11 +82,18 @@ namespace Agenda.Controllers
         {
             if (id != obj.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { Message = "Usuário não encontrado" });
             }
 
             await _contactService.UpdateContactAsync(obj);
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+
+            return View(viewModel);
         }
     }
 }
