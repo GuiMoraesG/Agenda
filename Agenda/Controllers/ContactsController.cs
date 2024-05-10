@@ -33,5 +33,29 @@ namespace Agenda.Controllers
             await _contactService.CreateContactAsync(contact);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var obj = await _contactService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _contactService.RemoveContactAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
