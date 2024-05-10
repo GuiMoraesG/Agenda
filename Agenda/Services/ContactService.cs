@@ -36,5 +36,13 @@ namespace Agenda.Services
             _context.Contact.Remove(obj);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateContactAsync(Contact obj)
+        {
+            bool hasAny = await _context.Contact.AnyAsync(x => x.Id == obj.Id);
+
+            _context.Update(obj);
+            await _context.SaveChangesAsync();
+        }
     }
 }
