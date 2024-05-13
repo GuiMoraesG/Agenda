@@ -1,6 +1,54 @@
-﻿@{
+﻿@model IEnumerable<Agenda.Models.User>
+
+@{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Login</h1>
 
+<p>
+    <a asp-action="Create" class="btn btn-dark">Adicionar Contato</a>
+</p>
+
+<table class="table table-responsive table-hover">
+    <thead>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.Name)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Email)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Password)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Cdate)
+            </td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cdate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

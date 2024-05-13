@@ -17,5 +17,14 @@ namespace Agenda.Services
         {
             return await _context.User.ToListAsync();
         }
+
+        public async Task AddUserAsync(User user)
+        {
+            DateTime date = DateTime.Now;
+            user.Cdate = date;
+
+            await _context.User.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }
