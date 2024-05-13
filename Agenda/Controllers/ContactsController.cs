@@ -3,6 +3,7 @@ using Agenda.Services;
 using Agenda.Models;
 using Agenda.Models.ViewModels;
 using System.Diagnostics;
+using Agenda.Services.Exceptions;
 
 namespace Agenda.Controllers
 {
@@ -56,8 +57,15 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _contactService.RemoveContactAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _contactService.RemoveContactAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException ex)
+            {
+                return RedirectToAction(nameof(Error), new { Message = ex.Message });
+            }
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -85,8 +93,15 @@ namespace Agenda.Controllers
                 return RedirectToAction(nameof(Error), new { Message = "Usuário não encontrado" });
             }
 
-            await _contactService.UpdateContactAsync(obj);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _contactService.UpdateContactAsync(obj);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException ex)
+            {
+                return RedirectToAction(nameof(Error), new { Message = ex.Message });
+            }
         }
 
         public IActionResult Error(string message)

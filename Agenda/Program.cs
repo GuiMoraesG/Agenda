@@ -7,6 +7,7 @@ builder.Services.AddDbContext<AgendaContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("AgendaContext"), new MySqlServerVersion(new Version(8, 0, 36))));
 
 builder.Services.AddScoped<ContactService>();
+builder.Services.AddScoped<UserService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

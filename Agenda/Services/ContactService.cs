@@ -1,6 +1,7 @@
 ﻿using Agenda.Data;
 using Agenda.Models;
 using Microsoft.EntityFrameworkCore;
+using Agenda.Services.Exceptions;
 
 namespace Agenda.Services
 {
@@ -32,17 +33,36 @@ namespace Agenda.Services
 
         public async Task RemoveContactAsync(int id)
         {
-            var obj = await _context.Contact.FindAsync(id);
-            _context.Contact.Remove(obj);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var obj = await _context.Contact.FindAsync(id);
+                _context.Contact.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException(ex.Message);
+            }
         }
 
         public async Task UpdateContactAsync(Contact obj)
         {
             bool hasAny = await _context.Contact.AnyAsync(x => x.Id == obj.Id);
 
-            _context.Update(obj);
-            await _context.SaveChangesAsync();
+            if (!hasAny)
+            {
+                throw new IntegrityException("Id not Found");
+            }
+
+            try
+            {
+                _context.Update(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbUpdateConcurrencyException(ex.Message);
+            }
         }
     }
 }
