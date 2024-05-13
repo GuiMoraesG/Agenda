@@ -33,5 +33,37 @@ namespace Agenda.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var obj = await _userService.FindByIdAsync(id.Value);
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, User user)
+        {
+            await _userService.UpdateUserAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            var obj = await _userService.FindByIdAsync(id.Value);
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _userService.RemoveUserAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
