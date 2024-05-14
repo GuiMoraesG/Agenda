@@ -29,8 +29,12 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(User user)
         {
-            await _userService.AddUserAsync(user);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
 
+            await _userService.AddUserAsync(user);
             return RedirectToAction(nameof(Index));
         }
 

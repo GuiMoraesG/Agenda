@@ -32,6 +32,11 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Contact contact)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             Console.Write(contact);
             await _contactService.CreateContactAsync(contact);
             return RedirectToAction(nameof(Index));

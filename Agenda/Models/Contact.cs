@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Agenda.Models
 {
@@ -15,6 +16,8 @@ namespace Agenda.Models
 
         [Display(Name = "Celular")]
         public string Phone { get; set; }
+
+        [ValidateNever]
         public User User { get; set; }
 
         public Contact() { }
