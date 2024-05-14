@@ -29,13 +29,22 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(User user)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View();
-            }
+                if (!ModelState.IsValid)
+                {
+                    return View();
+                }
 
-            await _userService.AddUserAsync(user);
-            return RedirectToAction(nameof(Index));
+                TempData["MensagemSucesso"] = "Contato cadastrado com sucesso";
+                await _userService.AddUserAsync(user);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["MensagemErro"] = $"Não foi possível cadastrar seu contato, {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public async Task<IActionResult> Edit(int? id)
