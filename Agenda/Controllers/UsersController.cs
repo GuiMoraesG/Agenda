@@ -87,9 +87,18 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _userService.RemoveUserAsync(id);
+            try
+            {
+                TempData["MensagemSucesso"] = "Conta deletada com sucesso";
+                await _userService.RemoveUserAsync(id);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["MensagemErro"] = $"Não foi possível deletar sua conta, {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }
