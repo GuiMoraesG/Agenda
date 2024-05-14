@@ -36,13 +36,13 @@ namespace Agenda.Controllers
                     return View();
                 }
 
-                TempData["MensagemSucesso"] = "Contato cadastrado com sucesso";
+                TempData["MensagemSucesso"] = "Conta cadastrado com sucesso";
                 await _userService.AddUserAsync(user);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                TempData["MensagemErro"] = $"Não foi possível cadastrar seu contato, {ex.Message}";
+                TempData["MensagemErro"] = $"Não foi possível criar sua conta, {ex.Message}";
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -58,14 +58,22 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, User user)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View();
+                if (!ModelState.IsValid)
+                {
+                    return View();
+                }
+
+                TempData["MensagemSucesso"] = "Conta editado com sucesso";
+                await _userService.UpdateUserAsync(user);
+                return RedirectToAction(nameof(Index));
             }
-
-            await _userService.UpdateUserAsync(user);
-
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                TempData["MensagemErro"] = $"Não foi possível editar sua conta, {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public async Task<IActionResult> Delete(int? id)
