@@ -100,6 +100,11 @@ namespace Agenda.Controllers
 
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View();
+                }
+
                 await _contactService.UpdateContactAsync(obj);
                 return RedirectToAction(nameof(Index));
             }

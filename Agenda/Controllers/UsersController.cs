@@ -49,6 +49,11 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             await _userService.UpdateUserAsync(user);
 
             return RedirectToAction(nameof(Index));
