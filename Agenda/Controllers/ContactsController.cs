@@ -32,14 +32,22 @@ namespace Agenda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Contact contact)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View();
-            }
+                if (!ModelState.IsValid)
+                {
+                    return View();
+                }
 
-            Console.Write(contact);
-            await _contactService.CreateContactAsync(contact);
-            return RedirectToAction(nameof(Index));
+                TempData["MensagemSucesso"] = "Contato criado !";
+                await _contactService.CreateContactAsync(contact);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException ex)
+            {
+                TempData["MensagemErro"] = $"{ex.Message}. Não foi possível criar o contato";
+                return RedirectToAction(nameof(Error), new { Message = ex.Message });
+            }
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -64,11 +72,13 @@ namespace Agenda.Controllers
         {
             try
             {
+                TempData["MensagemSucesso"] = "Contato deletado !";
                 await _contactService.RemoveContactAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch (IntegrityException ex)
             {
+                TempData["MensagemErro"] = $"{ex.Message}. Não foi possível deletar o contato";
                 return RedirectToAction(nameof(Error), new { Message = ex.Message });
             }
         }
@@ -105,11 +115,13 @@ namespace Agenda.Controllers
                     return View();
                 }
 
+                TempData["MensagemSucesso"] = "Contato Editado !";
                 await _contactService.UpdateContactAsync(obj);
                 return RedirectToAction(nameof(Index));
             }
             catch (IntegrityException ex)
             {
+                TempData["MensagemErro"] = $"{ex.Message}. Não foi possível editar o contato";
                 return RedirectToAction(nameof(Error), new { Message = ex.Message });
             }
         }
