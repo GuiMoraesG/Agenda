@@ -35,5 +35,10 @@ namespace Agenda.Models
             Password = password;
             Cdate = cdate;
         }
+
+        public bool ValidatePass(string senha)
+        {
+            return Password == senha;
+        }
     }
 }

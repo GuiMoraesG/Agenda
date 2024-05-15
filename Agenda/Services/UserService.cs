@@ -48,5 +48,10 @@ namespace Agenda.Services
             _context.User.Remove(obj);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User> FindByEmailAsync(string email)
+        {
+            return await _context.User.FirstOrDefaultAsync(x => x.Email.ToUpper() == email.ToUpper());
+        }
     }
 }
