@@ -1,21 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Agenda.Models;
 using Agenda.Services;
+using Agenda.Helper;
 
 namespace Agenda.Controllers
 {
     public class LoginController : Controller
     {
         private readonly UserService _userService;
+        private readonly Session _session;
 
-        public LoginController(UserService userService)
+        public LoginController(UserService userService, Session session)
         {
             _userService = userService;
+            _session = session;
         }
 
         public IActionResult Index()
         {
-            return View();
+            if (_session.GetSession() == null)
+            {
+                return View();
+            }
+
+            return RedirectToAction(nameof(LoginIn));
         }
 
         public IActionResult LoginIn()
@@ -48,6 +56,7 @@ namespace Agenda.Controllers
                     return View();
                 }
 
+                _session.CreateSession(User);
                 TempData["MensagemSucesso"] = $"Tudo Certo !!";
                 return RedirectToAction(nameof(LoginIn));
             }
@@ -56,6 +65,13 @@ namespace Agenda.Controllers
                 TempData["MensagemErro"] = $"{ex.Message}. Não foi possível realizar o Login";
                 return View();
             }
+        }
+
+        public IActionResult LogOut()
+        {
+            _session.RemoveSession();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
