@@ -2,7 +2,6 @@
 using Agenda.Data;
 using Agenda.Services;
 using Agenda.Helper;
-using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AgendaContext>(options =>
