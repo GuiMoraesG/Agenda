@@ -4,9 +4,11 @@ using Agenda.Models;
 using Agenda.Models.ViewModels;
 using System.Diagnostics;
 using Agenda.Services.Exceptions;
+using Agenda.Filters;
 
 namespace Agenda.Controllers
 {
+    [PageUserOn]
     public class ContactsController : Controller
     {
         private readonly ContactService _contactService;

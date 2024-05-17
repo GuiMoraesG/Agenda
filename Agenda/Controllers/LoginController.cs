@@ -2,6 +2,7 @@
 using Agenda.Models;
 using Agenda.Services;
 using Agenda.Helper;
+using Agenda.Filters;
 
 namespace Agenda.Controllers
 {
@@ -26,6 +27,7 @@ namespace Agenda.Controllers
             return RedirectToAction(nameof(LoginIn));
         }
 
+        [PageUserOn]
         public IActionResult LoginIn()
         {
             return View();
