@@ -10,16 +10,20 @@ namespace Agenda.Services
     {
         private readonly AgendaContext _context;
         private readonly Session _session;
+        private readonly UserService _userService;
 
-        public ContactService(AgendaContext context, Session session)
+        public ContactService(AgendaContext context, Session session, UserService userService)
         {
             _context = context;
             _session = session;
+            _userService = userService;
         }
 
         public async Task<List<Contact>> GetContactsAsync()
         {
-            return await _context.Contact.ToListAsync();
+            var userOn = _session.GetSession();
+
+            return await _context.Contact.Where(x => x.User == userOn).ToListAsync();
         }
 
         public async Task<Contact> FindByIdAsync(int id)
@@ -30,7 +34,8 @@ namespace Agenda.Services
         public async Task CreateContactAsync(Contact obj)
         {
             var userOn = _session.GetSession();
-            obj.User = _context.User.First();
+            User s = await _userService.FindByIdAsync(userOn.Id);
+            obj.User = s;
             await _context.AddAsync(obj);
             await _context.SaveChangesAsync();
         }
