@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Agenda.Helper;
 
 namespace Agenda.Models
 {
@@ -37,7 +38,12 @@ namespace Agenda.Models
 
         public bool ValidatePass(string senha)
         {
-            return Password == senha;
+            return Password == senha.CreateHash();
+        }
+
+        public void SetPasswordHash()
+        {
+            Password = Password.CreateHash();
         }
     }
 }

@@ -27,6 +27,7 @@ namespace Agenda.Services
         {
             DateTime date = DateTime.Now;
             user.Cdate = date;
+            user.SetPasswordHash();
 
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();

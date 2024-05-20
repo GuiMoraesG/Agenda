@@ -38,12 +38,12 @@ namespace Agenda.Controllers
 
                 TempData["MensagemSucesso"] = "Conta cadastrado com sucesso";
                 await _userService.AddUserAsync(user);
-                return RedirectToAction(nameof(Index));
+                return Redirect("https://localhost:7050/Login/Index");
             }
             catch (Exception ex)
             {
                 TempData["MensagemErro"] = $"Não foi possível criar sua conta, {ex.Message}";
-                return RedirectToAction(nameof(Index));
+                return Redirect("https://localhost:7050/Login/Index");
             }
         }
 
