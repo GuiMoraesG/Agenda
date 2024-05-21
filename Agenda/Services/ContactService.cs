@@ -34,8 +34,8 @@ namespace Agenda.Services
         public async Task CreateContactAsync(Contact obj)
         {
             var userOn = _session.GetSession();
-            User s = await _userService.FindByIdAsync(userOn.Id);
-            obj.User = s;
+            User user = await _userService.FindByIdAsync(userOn.Id);
+            obj.User = user;
             await _context.AddAsync(obj);
             await _context.SaveChangesAsync();
         }
